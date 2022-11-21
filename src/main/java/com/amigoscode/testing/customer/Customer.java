@@ -1,26 +1,33 @@
 package com.amigoscode.testing.customer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "Customer")
+@Table(name = "customer", uniqueConstraints = @UniqueConstraint(columnNames = {"phone_number"}))
 @JsonIgnoreProperties(allowGetters = true)
+@Data
 public class Customer {
 
     @Id
+    @GeneratedValue(generator = "uuid4")
+    @GenericGenerator(name = "UUID", strategy = "uuid4")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(name = "customer_id", columnDefinition = "CHAR(36)")
     private UUID id;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(name = "customer_name", nullable = false, columnDefinition = "TEXT")
     private String name;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
     public Customer(UUID id, String name, String phoneNumber) {
@@ -30,38 +37,5 @@ public class Customer {
     }
 
     public Customer() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
     }
 }

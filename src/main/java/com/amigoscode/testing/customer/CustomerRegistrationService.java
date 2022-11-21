@@ -2,8 +2,10 @@ package com.amigoscode.testing.customer;
 
 import com.amigoscode.testing.utils.PhoneNumberValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,6 +22,8 @@ public class CustomerRegistrationService {
         this.phoneNumberValidator = phoneNumberValidator;
     }
 
+    @Transactional
+    @Modifying
     public void registerNewCustomer(CustomerRegistrationRequest request) {
         String phoneNumber = request.getCustomer().getPhoneNumber();
 
